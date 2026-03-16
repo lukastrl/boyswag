@@ -652,25 +652,20 @@ function applyFilter(ctx,w,h,filter){
       d[i+3]=255;
     }
     ctx.putImageData(imageData,0,0);
-    // chromatic aberration — clipped within canvas
-    ctx.save();
-    ctx.rect(0,0,w,h);
-    ctx.clip();
+    // chromatic tint — centered, no offset bleed
     ctx.globalCompositeOperation='screen';
-    ctx.globalAlpha=0.35;
-    ctx.fillStyle='#FF0066';ctx.fillRect(6,0,w-6,h);
-    ctx.fillStyle='#0066FF';ctx.fillRect(0,0,w-6,h);
-    ctx.globalAlpha=0.15;
-    ctx.fillStyle='#00FFAA';ctx.fillRect(0,4,w,h-4);
+    ctx.globalAlpha=0.2;
+    ctx.fillStyle='#FF0066';ctx.fillRect(0,0,w,h);
+    ctx.globalAlpha=0.1;
+    ctx.fillStyle='#0066FF';ctx.fillRect(0,0,w,h);
     ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
-    ctx.restore();
-    // horizontal glitch bars
-    ctx.globalAlpha=0.4;
-    for(let i=0;i<8;i++){
-      const y=Math.floor(Math.random()*h);
-      const barH=Math.floor(Math.random()*12)+2;
+    // horizontal glitch bars only
+    ctx.globalAlpha=0.35;
+    for(let i=0;i<6;i++){
+      const gy=Math.floor(Math.random()*h);
+      const barH=Math.floor(Math.random()*8)+2;
       ctx.fillStyle=`hsl(${Math.random()*360},100%,50%)`;
-      ctx.fillRect(0,y,w,barH);
+      ctx.fillRect(0,gy,w,barH);
     }
     ctx.globalAlpha=1;
 
@@ -831,18 +826,21 @@ function drawStampText(ctx,W,H){
   const d=new Date().toLocaleDateString('en-US',{year:'numeric',month:'2-digit',day:'2-digit'});
   ctx.fillText(d+'  ///  BOYSWAG.VERCEL.APP',W/2,H-16);
 
-  // cipher barcode down both sides — full card height
-  ctx.font='13px serif';
-  ctx.fillStyle='rgba(255,45,120,0.55)';
-  const barcodeChars=(encodeInitials(wantText)+' ').repeat(30).split('');
+  // cipher barcode down both sides — full card height, reliable symbols
+  const safeSymbols = ['*', '+', 'x', 'o', '#', '/', '\\', '-', '|', '^', '<', '>', '~', '='];
+  const wishWords = wantText.trim().toUpperCase().split(/\s+/);
+  const borderChars = wishWords.map(w => safeSymbols[w.charCodeAt(0) % safeSymbols.length]).join(' ');
+  const borderSeq = (borderChars + ' ').repeat(10).split('');
+  ctx.font='bold 11px monospace';
+  ctx.fillStyle='rgba(255,45,120,0.6)';
   let charIdx=0;
-  for(let y=20;y<H-16;y+=14){
-    ctx.fillText(barcodeChars[charIdx%barcodeChars.length]||'✦', 4, y);
+  for(let y=22;y<H-10;y+=13){
+    ctx.fillText(borderSeq[charIdx%borderSeq.length], 5, y);
     charIdx++;
   }
   charIdx=0;
-  for(let y=20;y<H-16;y+=14){
-    ctx.fillText(barcodeChars[charIdx%barcodeChars.length]||'✦', W-16, y);
+  for(let y=22;y<H-10;y+=13){
+    ctx.fillText(borderSeq[charIdx%borderSeq.length], W-14, y);
     charIdx++;
   }
 }
