@@ -220,6 +220,15 @@
     margin: 0 0 1.8rem 0;
   }
 
+
+  #ep-link {
+    font-weight: 700;
+    color: rgba(255,150,180,0.9);
+    text-decoration: none;
+    letter-spacing: 0.12em;
+    transition: none;
+  }
+
   .lore-line { display: inline-block; will-change: transform; }
 
   .manifesto-text .closing {
@@ -559,7 +568,7 @@
   <p class="about-text">
     Singer, songwriter, artist, producer. Trans woman. Former sadgirl with a guitar.<br><br>
     <strong>BOYSWAG</strong> is her first project built entirely on a dark screen. Seven songs. One deal.<br><br>
-    Her previous EP <strong>I DIDN'T MEAN IT LIKE THAT</strong> is available now on Spotify and Apple Music.
+    Her previous EP <a href="ep.html" id="ep-link">I DIDN'T MEAN IT LIKE THAT</a> is available now on Spotify and Apple Music.
   </p>
   <div style="margin-top: 2rem; display: flex; gap: 2rem; flex-wrap: wrap;">
     <a href="https://linktr.ee/lukastrl" target="_blank" class="link-pill blue">All Links ↗</a>
@@ -691,7 +700,53 @@ function loreTick() {
   });
 
   requestAnimationFrame(loreTick);
+
+// EP title flicker
+const epLink = document.getElementById('ep-link');
+const epColors = ['#FF2D78','#00AAFF','#FFD700','#00FF88','#AA00FF','#FF2D78','#ffffff','#FF2D78'];
+let epFlickerTimer = null;
+
+function startEpFlicker() {
+  if (epFlickerTimer) return;
+  function flick() {
+    if (!epLink.matches(':hover') && !epLink.matches(':focus')) {
+      epLink.style.color = 'rgba(255,150,180,0.9)';
+      epFlickerTimer = null;
+      return;
+    }
+    epLink.style.color = epColors[Math.floor(Math.random() * epColors.length)];
+    epFlickerTimer = setTimeout(flick, 60 + Math.random() * 100);
+  }
+  flick();
+}
+
+epLink.addEventListener('mouseenter', startEpFlicker);
+epLink.addEventListener('mouseleave', () => { epLink.style.color = 'rgba(255,150,180,0.9)'; });
+
 }
 
 requestAnimationFrame(loreTick);
+
+// EP title flicker
+const epLink = document.getElementById('ep-link');
+const epColors = ['#FF2D78','#00AAFF','#FFD700','#00FF88','#AA00FF','#FF2D78','#ffffff','#FF2D78'];
+let epFlickerTimer = null;
+
+function startEpFlicker() {
+  if (epFlickerTimer) return;
+  function flick() {
+    if (!epLink.matches(':hover') && !epLink.matches(':focus')) {
+      epLink.style.color = 'rgba(255,150,180,0.9)';
+      epFlickerTimer = null;
+      return;
+    }
+    epLink.style.color = epColors[Math.floor(Math.random() * epColors.length)];
+    epFlickerTimer = setTimeout(flick, 60 + Math.random() * 100);
+  }
+  flick();
+}
+
+epLink.addEventListener('mouseenter', startEpFlicker);
+epLink.addEventListener('mouseleave', () => { epLink.style.color = 'rgba(255,150,180,0.9)'; });
+
 </script>
