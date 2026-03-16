@@ -652,14 +652,7 @@ function applyFilter(ctx,w,h,filter){
       d[i+3]=255;
     }
     ctx.putImageData(imageData,0,0);
-    // chromatic tint — centered, no offset bleed
-    ctx.globalCompositeOperation='screen';
-    ctx.globalAlpha=0.2;
-    ctx.fillStyle='#FF0066';ctx.fillRect(0,0,w,h);
-    ctx.globalAlpha=0.1;
-    ctx.fillStyle='#0066FF';ctx.fillRect(0,0,w,h);
-    ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
-    // horizontal glitch bars only
+    // horizontal glitch bars only — no color bleed
     ctx.globalAlpha=0.35;
     for(let i=0;i<6;i++){
       const gy=Math.floor(Math.random()*h);
@@ -817,11 +810,9 @@ function drawStampText(ctx,W,H){
   wrapText(ctx,offerText,W-80).forEach(line=>{ctx.fillText(line,W/2,y);y+=17;});
 
   y+=14;
-  ctx.font='bold 13px monospace';
+  ctx.font='16px serif';
   ctx.fillStyle='rgba(255,45,120,0.9)';
-  const safeBar=['*','+','x','o','#','/','\\','-','|','^','<','>','~','='];
-  const safeLine=wantText.trim().toUpperCase().split(/\s+/).map(w=>safeBar[w.charCodeAt(0)%safeBar.length]).join(' . ');
-  ctx.fillText(safeLine,W/2,y);
+  ctx.fillText(encodeInitials(wantText),W/2,y);
 
   ctx.font='10px monospace';
   ctx.fillStyle='rgba(255,255,255,0.22)';
