@@ -220,6 +220,8 @@
     margin: 0 0 1.8rem 0;
   }
 
+  .lore-line { display: inline-block; will-change: transform; }
+
   .manifesto-text .closing {
     color: var(--hot-pink);
     font-size: 1.2em;
@@ -406,6 +408,7 @@
     <li><a href="#manifesto">LORE</a></li>
     <li><a href="#tracks">TRACKS</a></li>
     <li><a href="#about">ABOUT</a></li>
+    <li><a href="ep.html">EP</a></li>
     <li><a href="deal.html">✦</a></li>
   </ul>
 </nav>
@@ -617,6 +620,19 @@ function loreTick() {
 
     const lineProgress = index / (loreLines.length - 1);
     const intensity = chaosPeak * lineProgress;
+
+    // ripple — skip first 4 lines, straighten last 3 before closing
+    const rippleStart = 4 / loreLines.length;
+    const rippleEnd = (loreLines.length - 4) / loreLines.length;
+    let rippleStrength = 0;
+    if (index >= 4 && lineProgress < rippleEnd) {
+      const t = (lineProgress - rippleStart) / (rippleEnd - rippleStart);
+      // ease in at start, ease out toward end
+      const taper = t < 0.8 ? t / 0.8 : 1 - ((t - 0.8) / 0.2);
+      rippleStrength = taper * (0.2 + chaosPeak * 0.8);
+    }
+    const wave = Math.sin(lineProgress * 8 - animTime * 2) * rippleStrength * 14;
+    el.style.transform = rippleStrength > 0.01 ? `translateX(${wave}px)` : 'none';
 
     // chromatic aberration — grows toward bottom
     const splitX = intensity * 5;
