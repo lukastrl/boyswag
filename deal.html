@@ -567,38 +567,143 @@ function capturePhoto(){
   canvas.height=video.videoHeight||360;
   const ctx=canvas.getContext('2d');
   ctx.save();ctx.scale(-1,1);ctx.drawImage(video,-canvas.width,0,canvas.width,canvas.height);ctx.restore();
-  applyChuckECheese(ctx,canvas.width,canvas.height);
+  const filter=Math.floor(Math.random()*4);
+  applyFilter(ctx,canvas.width,canvas.height,filter);
   photoDataUrl=canvas.toDataURL('image/jpeg',0.92);
   if(stream)stream.getTracks().forEach(t=>t.stop());
   showStage(2);
 }
 
-function applyChuckECheese(ctx,w,h){
+function applyFilter(ctx,w,h,filter){
   const imageData=ctx.getImageData(0,0,w,h);
   const d=imageData.data;
-  for(let i=0;i<d.length;i+=4){
-    const x=(i/4)%w;
-    const y=Math.floor(i/4/w);
-    const edgeX=Math.min(x,w-x)/(w*0.5);
-    const edgeY=Math.min(y,h-y)/(h*0.5);
-    const vignette=Math.min(edgeX,edgeY);
-    const bright=1+(1-vignette)*0.4;
-    d[i]=Math.min(255,d[i]*bright+25);
-    d[i+1]=Math.min(255,d[i+1]*bright+12);
-    d[i+2]=Math.min(255,d[i+2]*bright+18);
-    if(vignette<0.18){
-      const f=1-vignette/0.18;
-      d[i]=Math.min(255,d[i]+45*f);
-      d[i+2]=Math.min(255,d[i+2]+35*f);
+
+  if(filter===0){
+    // HEAT — deep thermal, blue-purple cold zones bleeding to hot pink/white hot zones
+    for(let i=0;i<d.length;i+=4){
+      const lum=(d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114)/255;
+      // map luminance to thermal palette: cold=deep blue, mid=purple/pink, hot=white
+      if(lum<0.25){
+        d[i]=Math.floor(lum*4*30);
+        d[i+1]=0;
+        d[i+2]=Math.floor(180+lum*4*75);
+      } else if(lum<0.5){
+        const t=(lum-0.25)*4;
+        d[i]=Math.floor(t*255);
+        d[i+1]=0;
+        d[i+2]=Math.floor(255*(1-t*0.5));
+      } else if(lum<0.75){
+        const t=(lum-0.5)*4;
+        d[i]=255;
+        d[i+1]=Math.floor(t*100);
+        d[i+2]=Math.floor(128*(1-t));
+      } else {
+        const t=(lum-0.75)*4;
+        d[i]=255;
+        d[i+1]=Math.floor(100+t*155);
+        d[i+2]=Math.floor(t*255);
+      }
+      d[i+3]=255;
     }
+    ctx.putImageData(imageData,0,0);
+    // grain
+    ctx.globalAlpha=0.06;
+    for(let y=0;y<h;y+=2){ctx.fillStyle=`rgba(255,255,255,${Math.random()*0.15})`;ctx.fillRect(0,y,w,1);}
+    ctx.globalAlpha=1;
+
+  } else if(filter===1){
+    // SCAN — high contrast black and white with heavy grain and scan lines
+    for(let i=0;i<d.length;i+=4){
+      const lum=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;
+      // crush blacks, blow highlights
+      const crushed=lum<60?0:lum>180?255:((lum-60)/120)*255;
+      // add noise
+      const noise=(Math.random()-0.5)*80;
+      const val=Math.max(0,Math.min(255,crushed+noise));
+      d[i]=d[i+1]=d[i+2]=val;
+      d[i+3]=255;
+    }
+    ctx.putImageData(imageData,0,0);
+    // heavy scan lines
+    ctx.globalAlpha=0.35;
+    for(let y=0;y<h;y+=3){
+      ctx.fillStyle='rgba(0,0,0,1)';
+      ctx.fillRect(0,y,w,1);
+    }
+    // hot pink tint overlay
+    ctx.globalCompositeOperation='screen';
+    ctx.globalAlpha=0.12;
+    ctx.fillStyle='#FF2D78';
+    ctx.fillRect(0,0,w,h);
+    ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+
+  } else if(filter===2){
+    // GLITCH — inverted with hard chromatic split and color corruption
+    for(let i=0;i<d.length;i+=4){
+      d[i]=255-d[i];
+      d[i+1]=255-d[i+1];
+      d[i+2]=255-d[i+2];
+      // corrupt random pixels
+      if(Math.random()<0.02){
+        d[i]=Math.random()*255;
+        d[i+1]=Math.random()*50;
+        d[i+2]=Math.random()*255;
+      }
+      d[i+3]=255;
+    }
+    ctx.putImageData(imageData,0,0);
+    // hard chromatic aberration — shift channels way apart
+    ctx.globalCompositeOperation='screen';
+    ctx.globalAlpha=0.35;
+    ctx.fillStyle='#FF0066';ctx.fillRect(8,0,w,h);
+    ctx.fillStyle='#0066FF';ctx.fillRect(-8,0,w,h);
+    ctx.globalAlpha=0.15;
+    ctx.fillStyle='#00FFAA';ctx.fillRect(0,4,w,h);
+    ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+    // horizontal glitch bars
+    ctx.globalAlpha=0.4;
+    for(let i=0;i<8;i++){
+      const y=Math.floor(Math.random()*h);
+      const barH=Math.floor(Math.random()*12)+2;
+      ctx.fillStyle=`hsl(${Math.random()*360},100%,50%)`;
+      ctx.fillRect(0,y,w,barH);
+    }
+    ctx.globalAlpha=1;
+
+  } else {
+    // INFRARED — deep red/orange heat map, blown whites, cold zones go deep purple
+    for(let i=0;i<d.length;i+=4){
+      const lum=(d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114)/255;
+      const boost=Math.pow(lum,0.6);
+      if(boost<0.3){
+        d[i]=Math.floor(boost*3*80);
+        d[i+1]=0;
+        d[i+2]=Math.floor(boost*3*180);
+      } else if(boost<0.6){
+        const t=(boost-0.3)*3.3;
+        d[i]=Math.floor(80+t*175);
+        d[i+1]=Math.floor(t*30);
+        d[i+2]=Math.floor(180*(1-t));
+      } else {
+        const t=(boost-0.6)*2.5;
+        d[i]=255;
+        d[i+1]=Math.floor(30+t*225);
+        d[i+2]=Math.floor(t*100);
+      }
+      d[i+3]=255;
+    }
+    ctx.putImageData(imageData,0,0);
+    // vignette burn
+    const vgrad=ctx.createRadialGradient(w/2,h/2,h*0.3,w/2,h/2,h*0.8);
+    vgrad.addColorStop(0,'rgba(0,0,0,0)');
+    vgrad.addColorStop(1,'rgba(0,0,0,0.6)');
+    ctx.fillStyle=vgrad;
+    ctx.fillRect(0,0,w,h);
+    // grain
+    ctx.globalAlpha=0.05;
+    for(let y=0;y<h;y++){ctx.fillStyle=`rgba(255,100,0,${Math.random()*0.2})`;ctx.fillRect(0,y,w,1);}
+    ctx.globalAlpha=1;
   }
-  ctx.putImageData(imageData,0,0);
-  ctx.globalCompositeOperation='screen';
-  ctx.globalAlpha=0.07;
-  ctx.fillStyle='#FF0044';ctx.fillRect(3,0,w,h);
-  ctx.fillStyle='#0044FF';ctx.fillRect(-3,0,w,h);
-  ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
-  ctx.fillStyle='rgba(255,240,220,0.1)';ctx.fillRect(0,0,w,h);
 }
 
 function goToOffer(){
