@@ -763,6 +763,11 @@ function buildResult(){
       ctx.drawImage(img,offsetX,offsetY,drawW,drawH);
       // scan lines only
       for(let y=16;y<316;y+=3){ctx.fillStyle='rgba(0,0,0,0.12)';ctx.fillRect(0,y,W,1);}
+      // transmission ID overlaid on bottom center of photo
+      ctx.textAlign='center';
+      ctx.font='28px serif';
+      ctx.fillStyle='rgba(255,45,120,0.85)';
+      ctx.fillText(encodeInitials(wantText), W/2, 290);
       drawStamp(ctx,W,H);
     };
     img.src=photoDataUrl;
