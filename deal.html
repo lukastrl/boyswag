@@ -831,29 +831,20 @@ function drawStampText(ctx,W,H){
   const d=new Date().toLocaleDateString('en-US',{year:'numeric',month:'2-digit',day:'2-digit'});
   ctx.fillText(d+'  ///  BOYSWAG.VERCEL.APP',W/2,H-16);
 
-  // cipher barcode down both sides
-  ctx.save();
-  ctx.font='11px serif';
-  ctx.fillStyle='rgba(255,45,120,0.5)';
-  const barcode=encodeInitials(wantText)+' '+encodeInitials(wantText)+' '+encodeInitials(wantText)+' '+encodeInitials(wantText)+' '+encodeInitials(wantText);
-  const chars=barcode.split('');
-  const startY=334;
-  const endY=H-20;
-  const step=14;
-  let cy=startY;
-  // left side — rotated 90deg
-  ctx.save();
-  ctx.translate(14,startY);
-  ctx.rotate(-Math.PI/2);
-  ctx.fillText(barcode.repeat(3),0,0);
-  ctx.restore();
-  // right side — rotated -90deg
-  ctx.save();
-  ctx.translate(W-6,endY);
-  ctx.rotate(Math.PI/2);
-  ctx.fillText(barcode.repeat(3),0,0);
-  ctx.restore();
-  ctx.restore();
+  // cipher barcode down both sides — full card height
+  ctx.font='13px serif';
+  ctx.fillStyle='rgba(255,45,120,0.55)';
+  const barcodeChars=(encodeInitials(wantText)+' ').repeat(30).split('');
+  let charIdx=0;
+  for(let y=20;y<H-16;y+=14){
+    ctx.fillText(barcodeChars[charIdx%barcodeChars.length]||'✦', 4, y);
+    charIdx++;
+  }
+  charIdx=0;
+  for(let y=20;y<H-16;y+=14){
+    ctx.fillText(barcodeChars[charIdx%barcodeChars.length]||'✦', W-16, y);
+    charIdx++;
+  }
 }
 
 function wrapText(ctx,text,maxW){
