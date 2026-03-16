@@ -625,10 +625,11 @@ function applyFilter(ctx,w,h,filter){
     }
     ctx.putImageData(imageData,0,0);
     // heavy scan lines
-    ctx.globalAlpha=0.35;
     for(let y=0;y<h;y+=3){
+      ctx.globalAlpha=0.35;
       ctx.fillStyle='rgba(0,0,0,1)';
       ctx.fillRect(0,y,w,1);
+      ctx.globalAlpha=1;
     }
     // hot pink tint overlay
     ctx.globalCompositeOperation='screen';
@@ -685,16 +686,6 @@ function applyFilter(ctx,w,h,filter){
       d[i+3]=255;
     }
     ctx.putImageData(imageData,0,0);
-    // vignette burn
-    const vgrad=ctx.createRadialGradient(w/2,h/2,h*0.3,w/2,h/2,h*0.8);
-    vgrad.addColorStop(0,'rgba(0,0,0,0)');
-    vgrad.addColorStop(1,'rgba(0,0,0,0.6)');
-    ctx.fillStyle=vgrad;
-    ctx.fillRect(0,0,w,h);
-    // grain
-    ctx.globalAlpha=0.05;
-    for(let y=0;y<h;y++){ctx.fillStyle=`rgba(255,100,0,${Math.random()*0.2})`;ctx.fillRect(0,y,w,1);}
-    ctx.globalAlpha=1;
   }
 }
 
@@ -754,24 +745,26 @@ function buildResult(){
     img.onload=()=>{
       // maintain aspect ratio, center with black bars
       const maxW=W, maxH=300;
-      const scale=Math.min(maxW/img.width, maxH/img.height);
+      const scale=Math.max(maxW/img.width, maxH/img.height);
       const drawW=img.width*scale;
       const drawH=img.height*scale;
       const offsetX=(W-drawW)/2;
       const offsetY=16+(maxH-drawH)/2;
       ctx.fillStyle='#000000';ctx.fillRect(0,16,W,300);
+      ctx.save();
+      ctx.rect(0,16,W,300);
+      ctx.clip();
       ctx.drawImage(img,offsetX,offsetY,drawW,drawH);
-      // scan lines only
+      ctx.restore();
+      // scan lines
       for(let y=16;y<316;y+=3){ctx.fillStyle='rgba(0,0,0,0.12)';ctx.fillRect(0,y,W,1);}
-      // transmission ID — bold, shadow for depth, no backdrop
+      // transmission ID — centered, sitting in lower third of photo
       ctx.textAlign='center';
-      ctx.font='bold 38px serif';
-      // dark shadow
+      ctx.font='bold 52px serif';
       ctx.fillStyle='rgba(0,0,0,0.9)';
-      ctx.fillText(encodeInitials(wantText), W/2+2, 294);
-      // main cipher
+      ctx.fillText(encodeInitials(wantText), W/2+3, 262);
       ctx.fillStyle='#FF2D78';
-      ctx.fillText(encodeInitials(wantText), W/2, 292);
+      ctx.fillText(encodeInitials(wantText), W/2, 259);
       drawStamp(ctx,W,H);
     };
     img.src=photoDataUrl;
@@ -832,7 +825,7 @@ function drawStampText(ctx,W,H){
   ctx.fillText('TRANSMISSION ID',W/2,y);
   y+=22;
   // big cipher barcode — initials only, large and prominent
-  ctx.font='32px serif';
+  ctx.font='bold 42px serif';
   ctx.fillStyle='rgba(255,45,120,1)';
   ctx.fillText(encodeInitials(wantText),W/2,y);
   y+=10;
