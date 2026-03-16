@@ -409,7 +409,7 @@
   @media (max-width: 600px) {
     nav { padding: 0.9rem 1.2rem; }
     .nav-links { gap: 1.2rem; }
-    .hero { padding: 6.5rem 1.5rem 3rem; }
+    .hero { padding: 2.5rem 1.5rem 2rem; }
     .section-wrap { padding: 4rem 1.5rem; }
     .lyric-big { white-space: normal; }
     footer { flex-direction: column; }
@@ -501,7 +501,7 @@
 
     <p>
       <span class="lore-line">SO MAYBE IT WAS JUST THE GROWING EXCITEMENT IN ME SEEMINGLY SPURRING OUT OF INSANITY,</span><br>
-      <span class="lore-line">OR A <span class="hi-blue">VENGEFUL SPIRIT</span> GENUINELY LEAPING INTO MY BODY</span><br>
+      <span class="lore-line">OR A VENGEFUL SPIRIT GENUINELY LEAPING INTO MY BODY</span><br>
       <span class="lore-line">AS FATE STRIPPED ME OF A HOME AND THAT GUITAR —</span><br>
       <span class="lore-line">SENDING ME TUMBLING OUT OF A FRESH BREAK-UP INTO SOMETHING</span><br>
       <span class="lore-line">FREEING AND OUTRIGHT EVIL YET ALSO GOOD AND HEALING. A REVENGE STORY.</span>
@@ -518,7 +518,8 @@
       <span class="lore-line">I ALSO DID THAT BECAUSE IT FELT SAFER. NUANCE ISN'T ALWAYS APPRECIATED.</span><br>
       <span class="lore-line">READING BETWEEN THE LINES IS A LOST ART. ANYTHING IN BETWEEN IS A CONSTRUCT,</span><br>
       <span class="lore-line">WHICH MEANS IT HAS AN ARCHITECT, WHICH SUGGESTS RESPONSIBILITY.</span><br>
-      <span class="lore-line">HERE I AM, <span style="font-weight:800; letter-spacing:0.15em;">A TRANS WOMAN UNDER THE ARTIST NAME LUKAS ASTRAL.</span></span><br>
+      <span class="lore-line">HERE I AM, A TRANS WOMAN UNDER THE ARTIST NAME</span><br>
+      <span class="lore-line lore-closing" style="color:#ffffff; font-weight:800; letter-spacing:0.15em;">LUKAS ASTRAL.</span><br>
       <span class="lore-line">I TRANSITIONED AT 21. NOW I SIT COMFORTABLY IN MY SKIN,</span><br>
       <span class="lore-line">CLOTHES ONLY AS CLOSE TO MASCULINE AS MY DYSPHORIA LETS ME WITHOUT LOSING MY MIND.</span>
     </p>
@@ -535,7 +536,7 @@
       <span class="lore-line">THE RESULTING ISOLATION IS SCARY PERFECT BREEDING GROUND FOR INSANITY —</span><br>
       <span class="lore-line">ONE OF THE MANY THINGS I'VE BEEN ACCUSED OF AS A TRANS PERSON GROWING UP.</span><br>
       <span class="lore-line">BUT EVEN THEN, I TRY NOT TO LET IT GET TO ME —</span><br>
-      <span class="lore-line">AND IF IT DOES, <span class="hi-blue">I ALCHEMIZE IT INTO ART.</span></span>
+      <span class="lore-line">AND IF IT DOES, I ALCHEMIZE IT INTO ART.</span>
     </p>
 
     <p>
@@ -611,7 +612,7 @@
   <div class="vhs-tag">Lukas Astral</div>
   <p class="about-text">
     Singer, songwriter, artist, producer. Trans woman. Former sadgirl with a guitar.<br><br>
-    <strong>BOYSWAG</strong> is her first project built entirely on a dark screen. Seven songs. One deal.<br><br>
+    <strong id="about-boyswag">BOYSWAG</strong> is her first project built entirely on a dark screen. Seven songs. One deal.<br><br>
     Her previous EP <a href="ep.html" id="ep-link">I DIDN'T MEAN IT LIKE THAT</a> is available now on Spotify and Apple Music.
   </p>
   <div style="margin-top: 2rem; display: flex; gap: 2rem; flex-wrap: wrap;">
@@ -745,6 +746,23 @@ function loreTick() {
 
   requestAnimationFrame(loreTick);
 
+// BOYSWAG about section flicker on scroll
+const aboutBoyswag = document.getElementById('about-boyswag');
+const bsColors = ['#FF0066','#00CCFF','#FFE600','#00FF44','#CC00FF','#FF4400','#00FFFF','#ffffff'];
+let bsTimer = null;
+
+window.addEventListener('scroll', () => {
+  if (!aboutBoyswag || bsTimer) return;
+  if (Math.random() > 0.7) return;
+  const c = bsColors[Math.floor(Math.random() * bsColors.length)];
+  aboutBoyswag.style.color = c;
+  bsTimer = setTimeout(() => {
+    aboutBoyswag.style.color = '';
+    bsTimer = null;
+  }, 60 + Math.random() * 100);
+});
+
+
 // WANNA TRY YOUR LUCK flicker
 const wannaEl = document.getElementById('lyric-wanna');
 const wannaColors = ['#FF0066','#00CCFF','#FFE600','#00FF44','#CC00FF','#FF4400','#FF0066','#00FFFF','#FF003C','#FFFFFF'];
@@ -820,6 +838,23 @@ epLink.addEventListener('mouseleave', () => { epLink.style.color = 'rgba(255,150
 }
 
 requestAnimationFrame(loreTick);
+
+// BOYSWAG about section flicker on scroll
+const aboutBoyswag = document.getElementById('about-boyswag');
+const bsColors = ['#FF0066','#00CCFF','#FFE600','#00FF44','#CC00FF','#FF4400','#00FFFF','#ffffff'];
+let bsTimer = null;
+
+window.addEventListener('scroll', () => {
+  if (!aboutBoyswag || bsTimer) return;
+  if (Math.random() > 0.7) return;
+  const c = bsColors[Math.floor(Math.random() * bsColors.length)];
+  aboutBoyswag.style.color = c;
+  bsTimer = setTimeout(() => {
+    aboutBoyswag.style.color = '';
+    bsTimer = null;
+  }, 60 + Math.random() * 100);
+});
+
 
 // WANNA TRY YOUR LUCK flicker
 const wannaEl = document.getElementById('lyric-wanna');
