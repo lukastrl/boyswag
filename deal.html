@@ -520,7 +520,8 @@
   <p class="result-sub">Your transmission has been logged. We have what we need.</p>
   <canvas id="result-canvas"></canvas>
   <div class="btn-row">
-    <button class="big-btn" onclick="downloadResult()">↓ DOWNLOAD YOUR DEAL</button>
+    <button class="big-btn" onclick="downloadResult()">↓ DOWNLOAD</button>
+    <button class="big-btn" onclick="shareResult()" id="share-btn" style="display:none;">↑ SHARE</button>
     <button class="ghost-btn" onclick="resetAll()">MAKE ANOTHER</button>
   </div>
 </div>
@@ -872,6 +873,37 @@ function downloadResult(){
   a.click();
 }
 
+async function shareResult(){
+  const card=document.getElementById('result-canvas');
+  // build story canvas 1080x1920
+  const story=document.createElement('canvas');
+  story.width=1080;story.height=1920;
+  const sctx=story.getContext('2d');
+  sctx.fillStyle='#000000';
+  sctx.fillRect(0,0,1080,1920);
+  // scale card to fit width with padding
+  const padding=60;
+  const scale=(1080-padding*2)/card.width;
+  const drawW=card.width*scale;
+  const drawH=card.height*scale;
+  const offsetX=padding;
+  const offsetY=(1920-drawH)/2;
+  sctx.drawImage(card,offsetX,offsetY,drawW,drawH);
+
+  story.toBlob(async(blob)=>{
+    const file=new File([blob],'boyswag-deal.jpg',{type:'image/jpeg'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      try{
+        await navigator.share({
+          files:[file],
+          title:'DONE DEAL.',
+          text:'boyswag.vercel.app'
+        });
+      }catch(e){ if(e.name!=='AbortError') downloadResult(); }
+    } else { downloadResult(); }
+  },'image/jpeg',0.92);
+}
+
 function resetAll(){
   photoDataUrl=null;wantText='';offerText='';
   ['want-text','offer-text'].forEach(id=>document.getElementById(id).value='');
@@ -879,6 +911,8 @@ function resetAll(){
   document.getElementById('scan-preview').src='';
   showStage(0);
 }
+
+if(navigator.share) document.getElementById('share-btn').style.display='';
 </script>
 </body>
 </html>
