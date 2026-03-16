@@ -812,10 +812,27 @@ function drawStampText(ctx,W,H){
   ctx.fillStyle='rgba(255,255,255,0.6)';
   wrapText(ctx,offerText,W-80).forEach(line=>{ctx.fillText(line,W/2,y);y+=17;});
 
-  y+=14;
-  ctx.font='16px serif';
-  ctx.fillStyle='rgba(255,45,120,0.9)';
+  y+=8;
+  // divider before cipher
+  ctx.fillStyle='rgba(255,45,120,0.2)';
+  ctx.fillRect(40,y,W-80,1);
+  y+=16;
+  // cipher label
+  ctx.font='700 9px "Plus Jakarta Sans",sans-serif';
+  ctx.fillStyle='rgba(255,45,120,0.6)';
+  ctx.fillText('TRANSMISSION ID',W/2,y);
+  y+=16;
+  // big cipher barcode
+  ctx.font='22px serif';
+  ctx.fillStyle='rgba(255,45,120,1)';
   ctx.fillText(encodeInitials(wantText),W/2,y);
+  y+=10;
+  // full encoded wish below it smaller
+  ctx.font='13px serif';
+  ctx.fillStyle='rgba(255,45,120,0.55)';
+  const fullCipher=wantText.trim().toUpperCase().split('').map(c=>CIPHER[c]||c).join(' ');
+  const cipherLines=wrapText(ctx,fullCipher,W-60);
+  cipherLines.forEach(line=>{ctx.fillText(line,W/2,y);y+=16;});
 
   ctx.font='10px monospace';
   ctx.fillStyle='rgba(255,255,255,0.22)';
