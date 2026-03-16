@@ -18,7 +18,7 @@
   html { scroll-behavior: smooth; }
 
   body {
-    background: #060606;
+    background: #06068a;
     color: var(--white);
     font-family: 'Plus Jakarta Sans', sans-serif;
     min-height: 100vh;
@@ -85,7 +85,7 @@
 
   .popup {
     border: 1px solid rgba(255,255,255,0.2);
-    background: rgba(6,6,6,0.97);
+    background: #1840E8;
     max-width: 480px;
     width: 100%;
     animation: fadeUp 0.5s ease both;
@@ -159,7 +159,7 @@
     width: 100%;
     max-width: 480px;
     aspect-ratio: 4/3;
-    background: #000;
+    background: #06068a;
     overflow: hidden;
     border: 1px solid rgba(255,255,255,0.1);
   }
@@ -255,7 +255,7 @@
   .sure-overlay {
     position: fixed;
     top:0;left:0;right:0;bottom:0;
-    background: rgba(6,6,6,0.92);
+    background: rgba(24,64,232,0.92);
     z-index: 500;
     display: none;
     flex-direction: column;
@@ -268,7 +268,7 @@
 
   .sure-box {
     border: 1px solid rgba(255,255,255,0.2);
-    background: #060606;
+    background: #1840E8;
     max-width: 400px;
     width: 100%;
     animation: fadeUp 0.3s ease both;
@@ -338,7 +338,7 @@
     aspect-ratio: 4/3;
     overflow: hidden;
     border: 1px solid rgba(255,255,255,0.1);
-    background: #000;
+    background: #06068a;
   }
 
   #scan-preview { width: 100%; height: 100%; object-fit: cover; }
@@ -739,7 +739,7 @@ function buildResult(){
   const W=480,H=660;
   canvas.width=W;canvas.height=H;
   const ctx=canvas.getContext('2d');
-  ctx.fillStyle='#060606';ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#06068a';ctx.fillRect(0,0,W,H);
 
   if(photoDataUrl){
     const img=new Image();
@@ -751,7 +751,7 @@ function buildResult(){
       const drawH=img.height*scale;
       const offsetX=(W-drawW)/2;
       const offsetY=16+(maxH-drawH)/2;
-      ctx.fillStyle='#000000';ctx.fillRect(0,16,W,300);
+      ctx.fillStyle='#06068a';ctx.fillRect(0,16,W,300);
       ctx.save();
       ctx.rect(0,16,W,300);
       ctx.clip();
@@ -813,7 +813,8 @@ function drawStampText(ctx,W,H){
 
   ctx.font='400 12px "Plus Jakarta Sans",sans-serif';
   ctx.fillStyle='rgba(255,255,255,0.6)';
-  wrapText(ctx,offerText.toUpperCase(),W-80).forEach(line=>{ctx.fillText(line,W/2,y);y+=17;});
+  const encOffer=offerText.trim().toUpperCase().split('').map(c=>CIPHER[c]||c).join(' ');
+  wrapText(ctx,encOffer,W-80).forEach(line=>{ctx.fillText(line,W/2,y);y+=17;});
 
   y+=8;
   // divider before cipher
@@ -879,7 +880,7 @@ async function shareResult(){
   const story=document.createElement('canvas');
   story.width=1080;story.height=1920;
   const sctx=story.getContext('2d');
-  sctx.fillStyle='#000000';
+  sctx.fillStyle='#06068a';
   sctx.fillRect(0,0,1080,1920);
   // scale card to fit width with padding
   const padding=60;
