@@ -817,20 +817,22 @@ function drawStampText(ctx,W,H){
   wrapText(ctx,offerText,W-80).forEach(line=>{ctx.fillText(line,W/2,y);y+=17;});
 
   y+=14;
-  ctx.font='16px serif';
+  ctx.font='bold 13px monospace';
   ctx.fillStyle='rgba(255,45,120,0.9)';
-  ctx.fillText(encodeInitials(wantText),W/2,y);
+  const safeBar=['*','+','x','o','#','/','\\','-','|','^','<','>','~','='];
+  const safeLine=wantText.trim().toUpperCase().split(/\s+/).map(w=>safeBar[w.charCodeAt(0)%safeBar.length]).join(' . ');
+  ctx.fillText(safeLine,W/2,y);
 
   ctx.font='10px monospace';
   ctx.fillStyle='rgba(255,255,255,0.22)';
   const d=new Date().toLocaleDateString('en-US',{year:'numeric',month:'2-digit',day:'2-digit'});
   ctx.fillText(d+'  ///  BOYSWAG.VERCEL.APP',W/2,H-16);
 
-  // cipher barcode down both sides — full card height, reliable symbols
-  const safeSymbols = ['*', '+', 'x', 'o', '#', '/', '\\', '-', '|', '^', '<', '>', '~', '='];
+  // cipher barcode down both sides — pure ASCII, unique per wish
+  const safeSymbols = ['*', '+', 'x', 'o', '#', '/', '\\', '-', '|', '^', '<', '>', '~', '=', '@', '%', '&', '!', '?', ':'];
   const wishWords = wantText.trim().toUpperCase().split(/\s+/);
-  const borderChars = wishWords.map(w => safeSymbols[w.charCodeAt(0) % safeSymbols.length]).join(' ');
-  const borderSeq = (borderChars + ' ').repeat(10).split('');
+  const borderChar = (w) => safeSymbols[w.charCodeAt(0) % safeSymbols.length];
+  const borderSeq = (wishWords.map(borderChar).join(' ') + ' ').repeat(10).split('');
   ctx.font='bold 11px monospace';
   ctx.fillStyle='rgba(255,45,120,0.6)';
   let charIdx=0;
