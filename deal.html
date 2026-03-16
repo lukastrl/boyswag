@@ -457,7 +457,7 @@
 <div class="stage" id="stage-2">
   <p class="wish-prompt">MAKE YOUR DEAL.</p>
   <p class="wish-sub">What do you want? State it clearly.</p>
-  <textarea class="wish-input" id="want-text" placeholder="I want..." maxlength="200" oninput="updateCount('want-text','want-count',200)"></textarea>
+  <textarea class="wish-input" id="want-text" style="text-transform:uppercase;" placeholder="I want..." maxlength="200" oninput="updateCount('want-text','want-count',200)"></textarea>
   <div class="char-count"><span id="want-count">200</span> CHARACTERS REMAINING</div>
   <button class="big-btn" style="max-width:480px;width:100%;" onclick="goToOffer()">CONTINUE →</button>
 </div>
@@ -465,7 +465,7 @@
 <div class="stage" id="stage-3">
   <p class="wish-prompt">YOUR OFFERING.</p>
   <p class="wish-sub">What are you willing to give up? Of equal value.</p>
-  <textarea class="wish-input" id="offer-text" placeholder="In exchange, I offer..." maxlength="200" oninput="updateCount('offer-text','offer-count',200)"></textarea>
+  <textarea class="wish-input" id="offer-text" style="text-transform:uppercase;" placeholder="In exchange, I offer..." maxlength="200" oninput="updateCount('offer-text','offer-count',200)"></textarea>
   <div class="char-count"><span id="offer-count">200</span> CHARACTERS REMAINING</div>
   <button class="big-btn" style="max-width:480px;width:100%;" onclick="showSure()">✦ SEAL IT</button>
 </div>
@@ -801,7 +801,7 @@ function drawStampText(ctx,W,H){
   ctx.font='400 12px "Plus Jakarta Sans",sans-serif';
   ctx.fillStyle='rgba(255,255,255,0.9)';
   let y=470;
-  wrapText(ctx,wantText,W-80).forEach(line=>{ctx.fillText(line,W/2,y);y+=17;});
+  wrapText(ctx,wantText.toUpperCase(),W-80).forEach(line=>{ctx.fillText(line,W/2,y);y+=17;});
 
   y+=10;
   ctx.font='700 10px "Plus Jakarta Sans",sans-serif';
@@ -810,7 +810,7 @@ function drawStampText(ctx,W,H){
 
   ctx.font='400 12px "Plus Jakarta Sans",sans-serif';
   ctx.fillStyle='rgba(255,255,255,0.6)';
-  wrapText(ctx,offerText,W-80).forEach(line=>{ctx.fillText(line,W/2,y);y+=17;});
+  wrapText(ctx,offerText.toUpperCase(),W-80).forEach(line=>{ctx.fillText(line,W/2,y);y+=17;});
 
   y+=8;
   // divider before cipher
@@ -821,18 +821,12 @@ function drawStampText(ctx,W,H){
   ctx.font='700 9px "Plus Jakarta Sans",sans-serif';
   ctx.fillStyle='rgba(255,45,120,0.6)';
   ctx.fillText('TRANSMISSION ID',W/2,y);
-  y+=16;
-  // big cipher barcode
-  ctx.font='22px serif';
+  y+=22;
+  // big cipher barcode — initials only, large and prominent
+  ctx.font='32px serif';
   ctx.fillStyle='rgba(255,45,120,1)';
   ctx.fillText(encodeInitials(wantText),W/2,y);
   y+=10;
-  // full encoded wish below it smaller
-  ctx.font='13px serif';
-  ctx.fillStyle='rgba(255,45,120,0.55)';
-  const fullCipher=wantText.trim().toUpperCase().split('').map(c=>CIPHER[c]||c).join(' ');
-  const cipherLines=wrapText(ctx,fullCipher,W-60);
-  cipherLines.forEach(line=>{ctx.fillText(line,W/2,y);y+=16;});
 
   ctx.font='10px monospace';
   ctx.fillStyle='rgba(255,255,255,0.22)';
