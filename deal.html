@@ -763,11 +763,19 @@ function buildResult(){
       ctx.drawImage(img,offsetX,offsetY,drawW,drawH);
       // scan lines only
       for(let y=16;y<316;y+=3){ctx.fillStyle='rgba(0,0,0,0.12)';ctx.fillRect(0,y,W,1);}
-      // transmission ID overlaid on bottom center of photo
+      // transmission ID overlaid on bottom center of photo — bold, high contrast
       ctx.textAlign='center';
-      ctx.font='28px serif';
-      ctx.fillStyle='rgba(255,45,120,0.85)';
-      ctx.fillText(encodeInitials(wantText), W/2, 290);
+      // dark shadow/backdrop for contrast
+      ctx.fillStyle='rgba(0,0,0,0.45)';
+      ctx.fillRect(0,258,W,48);
+      // white knockout layer for extra pop
+      ctx.font='bold 38px serif';
+      ctx.fillStyle='rgba(255,255,255,0.15)';
+      ctx.fillText(encodeInitials(wantText), W/2+2, 294);
+      // main cipher — solid hot pink, large
+      ctx.font='bold 38px serif';
+      ctx.fillStyle='#FF2D78';
+      ctx.fillText(encodeInitials(wantText), W/2, 292);
       drawStamp(ctx,W,H);
     };
     img.src=photoDataUrl;
