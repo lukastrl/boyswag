@@ -460,7 +460,7 @@
       <li><a href="#tracks">TRACKS</a></li>
       <li><a href="#about">ABOUT</a></li>
       <li><a href="ep.html">EP</a></li>
-      <li><a href="deal.html">✦</a></li>
+      <li><a href="deal.html" id="nav-star">✦</a></li>
     </ul>
   </div>
   <div class="cipher-strip" aria-hidden="true"><div class="cipher-strip-inner">✦ ⍉ ☿ 🜳 ⛧ 🜸 ☽ 🜺 ⟁ ♰ 🜏 ⍟ ☩ ✶ ☊ ☤ ✝ 🜁 ☉ ✠ ⍧ 🜴 ⌬ ☸ &nbsp;&nbsp;&nbsp;✦ ⍉ ☿ 🜳 ⛧ 🜸 ☽ 🜺 ⟁ ♰ 🜏 ⍟ ☩ ✶ ☊ ☤ ✝ 🜁 ☉ ✠ ⍧ 🜴 ⌬ ☸ &nbsp;&nbsp;&nbsp;✦ ⍉ ☿ 🜳 ⛧ 🜸 ☽ 🜺 ⟁ ♰ 🜏 ⍟ ☩ ✶ ☊ ☤ ✝ 🜁 ☉ ✠ ⍧ 🜴 ⌬ ☸ &nbsp;&nbsp;&nbsp;✦ ⍉ ☿ 🜳 ⛧ 🜸 ☽ 🜺 ⟁ ♰ 🜏 ⍟ ☩ ✶ ☊ ☤ ✝ 🜁 ☉ ✠ ⍧ 🜴 ⌬ ☸</div></div>
@@ -468,7 +468,7 @@
 
 <section class="hero">
   <p class="hero-ghost">▶ PLAY &nbsp;&nbsp; ■ STOP &nbsp;&nbsp; ❚❚ PAUSE</p>
-  <h1 class="hero-title">BOYSWAG</h1>
+  <h1 class="hero-title" id="hero-title">BOYSWAG</h1>
   <p class="vhs-label">
     <span class="play-icon"></span>
     A REVENGE STORY &nbsp;///&nbsp; 7 SONGS
@@ -746,6 +746,39 @@ function loreTick() {
 
   requestAnimationFrame(loreTick);
 
+// BOYSWAG title flicker on scroll
+const heroTitle = document.getElementById('hero-title');
+const navStar = document.getElementById('nav-star');
+const titleColors = ['#FF0066','#00CCFF','#FFE600','#00FF44','#CC00FF','#FF4400','#00FFFF','#ffffff'];
+let titleTimer = null;
+let starTimer = null;
+
+window.addEventListener('scroll', () => {
+  // hero title flicker
+  if (heroTitle && !titleTimer) {
+    const c = titleColors[Math.floor(Math.random() * titleColors.length)];
+    heroTitle.style.color = c;
+    titleTimer = setTimeout(() => {
+      heroTitle.style.color = '';
+      titleTimer = null;
+    }, 60 + Math.random() * 100);
+  }
+
+  // nav star flicker — keep same opacity as nav
+  if (navStar && !starTimer) {
+    if (Math.random() > 0.5) return;
+    const c = titleColors[Math.floor(Math.random() * titleColors.length)];
+    const orig = navStar.style.color || '';
+    navStar.style.color = c;
+    navStar.style.opacity = window.getComputedStyle(navStar).opacity;
+    starTimer = setTimeout(() => {
+      navStar.style.color = orig;
+      starTimer = null;
+    }, 60 + Math.random() * 100);
+  }
+});
+
+
 // BOYSWAG about section flicker on scroll
 const aboutBoyswag = document.getElementById('about-boyswag');
 const bsColors = ['#FF0066','#00CCFF','#FFE600','#00FF44','#CC00FF','#FF4400','#00FFFF','#ffffff'];
@@ -838,6 +871,39 @@ epLink.addEventListener('mouseleave', () => { epLink.style.color = 'rgba(255,150
 }
 
 requestAnimationFrame(loreTick);
+
+// BOYSWAG title flicker on scroll
+const heroTitle = document.getElementById('hero-title');
+const navStar = document.getElementById('nav-star');
+const titleColors = ['#FF0066','#00CCFF','#FFE600','#00FF44','#CC00FF','#FF4400','#00FFFF','#ffffff'];
+let titleTimer = null;
+let starTimer = null;
+
+window.addEventListener('scroll', () => {
+  // hero title flicker
+  if (heroTitle && !titleTimer) {
+    const c = titleColors[Math.floor(Math.random() * titleColors.length)];
+    heroTitle.style.color = c;
+    titleTimer = setTimeout(() => {
+      heroTitle.style.color = '';
+      titleTimer = null;
+    }, 60 + Math.random() * 100);
+  }
+
+  // nav star flicker — keep same opacity as nav
+  if (navStar && !starTimer) {
+    if (Math.random() > 0.5) return;
+    const c = titleColors[Math.floor(Math.random() * titleColors.length)];
+    const orig = navStar.style.color || '';
+    navStar.style.color = c;
+    navStar.style.opacity = window.getComputedStyle(navStar).opacity;
+    starTimer = setTimeout(() => {
+      navStar.style.color = orig;
+      starTimer = null;
+    }, 60 + Math.random() * 100);
+  }
+});
+
 
 // BOYSWAG about section flicker on scroll
 const aboutBoyswag = document.getElementById('about-boyswag');
