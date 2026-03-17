@@ -444,6 +444,7 @@
 </style>
 </head>
 <body>
+<div id="boot-flash" style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:99999;pointer-events:none;"></div>
 
 <!-- 
     "Whence and how do they come? I do not know and I have nothing to do with it.
@@ -628,6 +629,28 @@
   <a href="deal.html" style="font-family: 'VT323', monospace; font-size: 0.75rem; letter-spacing: 0.2em; color: rgba(255,255,255,0.15); text-decoration: none; text-transform: uppercase; transition: color 0.2s;" onmouseover="this.style.color='var(--hot-pink)'" onmouseout="this.style.color='rgba(255,255,255,0.15)'">✦✦✦</a>
   <span style="color: var(--hot-pink); font-size: 0.7rem; letter-spacing: 0.15em; width: 100%; margin-top: 0.5rem; line-height: 2.2; font-family: 'VT323', monospace;">⍧ 🜺 ⛧ ✶ ☿ ⛧  ✦ ✶ 🜳  🜺 ☊ ⍧  🜳 ☊  ✶̈ 🜺 ⛧ ⌬  ☿ ☊ ☩ ⛧ ⟁̈  ⟁  🜳 ☊  ✶ ☊ ✶̈  🜏 ✶ ☊ ⍧  ✦ ✶ 🜳  ⟁  🜺 ✦ ✠ ⛧  ✶ ☊ ✶̈ 🜺 ⟁ ✶ ☽  ✶̈ ☊  🜳 ☊  ⍧ ⟁ ✶̈ 🜺  ⟁ ✶̈ ·.  ✶̈ 🜺 ☊ 🜁 ⛧  ⍧ 🜺 ⟁ ☿ 🜺  ☤ ⍟ ⛧ ✦ 🜁 ⛧  ☩ ⛧ ·,  ⟁  🜏 ⛧ ⛧ ☤  ⟁ ✶  ☩ ⌬  🜺 ⛧ ✦ 🜳  ✦ ✶ 🜳  🜺 ☉ ☩  ✶̈ 🜺 ⛧ ☩ ;  ✦ ✶̈  ⍟ ⛧ ✦ 🜁 ✶̈  ☊ ✶̈ 🜺 ⛧ ✝ 🜁  🜺 ✦ ✠ ⛧  ✶̈ ☊ ⍟ 🜳  ☩ ⛧  ✶̈ 🜺 ✦ ✶̈  ⟁  🜳 ☊  🜁 ☊ ·.</span>
 </footer>
+
+
+<script>
+// BOOT FLASH — invert page white, then black, then settle
+(function(){
+  const body = document.body;
+  // frame 1: white — invert everything
+  body.style.filter = 'invert(1)';
+  body.style.background = '#ffffff';
+  setTimeout(() => {
+    // frame 2: black
+    body.style.filter = 'invert(1) brightness(0)';
+    setTimeout(() => {
+      // frame 3: settle
+      body.style.transition = 'filter 0.2s ease';
+      body.style.filter = 'none';
+      body.style.background = '';
+      setTimeout(() => { body.style.transition = ''; }, 250);
+    }, 400);
+  }, 700);
+})();
+</script>
 
 </body>
 
