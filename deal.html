@@ -566,7 +566,6 @@
   <div class="btn-row">
     <button class="big-btn" onclick="downloadResult()">↓ DOWNLOAD</button>
     <button class="big-btn" onclick="shareResult()" id="share-btn" style="display:none;">↑ SHARE</button>
-    <button class="ghost-btn" onclick="addToLedger()" id="ledger-btn">☍ ADD TO THE LEDGER</button>
     <button class="ghost-btn" onclick="resetAll()">MAKE ANOTHER</button>
   </div>
 </div>
@@ -1104,38 +1103,6 @@ function wrapText(ctx,text,maxW){
   return lines;
 }
 
-
-async function addToLedger() {
-  const btn = document.getElementById('ledger-btn');
-  btn.textContent = '▶ SUBMITTING...';
-  btn.disabled = true;
-
-  const deal = {
-    wish: wantText,
-    offering: offerText,
-    trigger: currentTrigger || null,
-    date: new Date().toISOString(),
-  };
-
-  try {
-    // submit to ledger storage (shared)
-    const pending = await getLedgerPending();
-    pending.unshift({ ...deal, id: Date.now() + Math.random(), submitted: new Date().toISOString() });
-    await window.storage.set('ledger:pending', JSON.stringify(pending), true);
-    btn.textContent = '✦ SUBMITTED.';
-    btn.style.color = 'rgba(255,215,0,0.8)';
-  } catch(e) {
-    btn.textContent = '✕ FAILED. TRY AGAIN.';
-    btn.disabled = false;
-  }
-}
-
-async function getLedgerPending() {
-  try {
-    const result = await window.storage.get('ledger:pending');
-    return result ? JSON.parse(result.value) : [];
-  } catch(e) { return []; }
-}
 
 function downloadResult(){
   const a=document.createElement('a');
