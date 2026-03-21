@@ -441,10 +441,180 @@
     100% { transform: translateX(-50%); }
   }
 
+
+  /* EMAIL POPUP */
+  #email-popup {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 9000;
+    background: rgba(6,6,138,0.92);
+    backdrop-filter: blur(6px);
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+
+  #email-popup.active { display: flex; }
+
+  .email-popup-box {
+    background: #1840E8;
+    border: 1px solid rgba(255,45,120,0.4);
+    max-width: 440px;
+    width: 100%;
+    padding: 2.5rem 2rem;
+    position: relative;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .email-popup-close {
+    position: absolute;
+    top: 1rem; right: 1.2rem;
+    font-family: 'VT323', monospace;
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.3);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+
+  .email-popup-close:hover { color: var(--hot-pink); }
+
+  .email-popup-eyebrow {
+    font-family: 'VT323', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.35em;
+    color: var(--hot-pink);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .email-popup-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.4rem, 5vw, 2rem);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 0.8rem;
+  }
+
+  .email-popup-sub {
+    font-family: 'VT323', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    line-height: 1.8;
+  }
+
+  .email-popup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .email-popup-input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .email-popup-input::placeholder { color: rgba(255,255,255,0.25); }
+  .email-popup-input:focus { border-color: var(--hot-pink); }
+
+  .email-popup-btn {
+    width: 100%;
+    padding: 0.9rem;
+    background: var(--hot-pink);
+    border: none;
+    color: var(--white);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .email-popup-btn:hover { opacity: 0.85; }
+
+  .email-popup-note {
+    font-family: 'VT323', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.2);
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 0.8rem;
+  }
+
+  .email-success {
+    text-align: center;
+    padding: 1rem 0;
+  }
+
+  .email-success-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    color: var(--hot-pink);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .email-success-sub {
+    font-family: 'VT323', monospace;
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+  }
+
 </style>
 </head>
 <body>
-<div id="boot-flash" style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:99999;pointer-events:none;"></div>
+<script>
+(function(){
+  // Frame 1: invert everything — white bg, black text
+  document.body.style.filter = 'invert(1)';
+  document.body.style.background = '#ffffff';
+
+  setTimeout(function(){
+    // Frame 2: black bg, white text — like image 7
+    document.body.style.filter = 'none';
+    document.body.style.background = '#000000';
+    document.body.style.color = '#ffffff';
+    var strip = document.querySelector('.cipher-strip-inner');
+    var vhsLabel = document.querySelector('.vhs-label');
+    if (strip) strip.style.color = '#ffffff';
+    if (vhsLabel) vhsLabel.style.color = '#ffffff';
+    var playIcon = document.querySelector('.play-icon');
+    if (playIcon) playIcon.style.borderColor = 'transparent transparent transparent #ffffff';
+
+    setTimeout(function(){
+      document.body.style.background = '';
+      document.body.style.color = '';
+      if (strip) strip.style.color = '';
+      if (vhsLabel) vhsLabel.style.color = '';
+      if (playIcon) playIcon.style.borderColor = '';
+    }, 600);
+  }, 700);
+})();
+</script>
 
 <!-- 
     "Whence and how do they come? I do not know and I have nothing to do with it.
@@ -479,7 +649,8 @@
 
 <div class="lyric-strip">
   <span class="lyric-big" id="lyric-wanna">WANNA TRY YOUR LUCK?</span>
-  <p class="lyric-attr">UMM — Lead Single — BOYSWAG</p>
+  <p class="lyric-attr">BOYSWAG — LUKAS ASTRAL</p>
+  <button onclick="document.getElementById('email-popup').classList.add('active')" style="background:none;border:none;cursor:pointer;margin-top:1.2rem;font-size:1.4rem;color:rgba(255,255,255,0.3);transition:color 0.2s;display:block;" onmouseover="this.style.color='var(--hot-pink)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">✉</button>
 </div>
 
 <section class="section-wrap" id="manifesto">
@@ -568,33 +739,33 @@
 <section id="tracks">
   <div class="section-wrap" style="padding-top: 4rem; padding-bottom: 4rem;">
     <div class="vhs-tag">Tracklist</div>
-    <ul class="tracklist">
+    <ul class="tracklist" id="tracklist">
       <li class="track-item">
         <span class="track-num">B — 01</span>
         <span class="track-name">———</span>
         <span class="track-status status-coming">COMING</span>
       </li>
-      <li class="track-item">
+      <li class="track-item glitch-track">
         <span class="track-num">O — 02</span>
-        <span class="track-name">UMM</span>
-        <span class="track-status status-single">SINGLE</span>
+        <span class="track-name">———</span>
+        <span class="track-status status-coming">COMING</span>
       </li>
-      <li class="track-item">
+      <li class="track-item glitch-track">
         <span class="track-num">Y — 03</span>
         <span class="track-name">———</span>
         <span class="track-status status-coming">COMING</span>
       </li>
-      <li class="track-item">
+      <li class="track-item glitch-track">
         <span class="track-num">S — 04</span>
         <span class="track-name">———</span>
         <span class="track-status status-coming">COMING</span>
       </li>
-      <li class="track-item">
+      <li class="track-item glitch-track">
         <span class="track-num">W — 05</span>
         <span class="track-name">———</span>
         <span class="track-status status-coming">COMING</span>
       </li>
-      <li class="track-item">
+      <li class="track-item glitch-track">
         <span class="track-num">A — 06</span>
         <span class="track-name">———</span>
         <span class="track-status status-coming">COMING</span>
@@ -621,35 +792,93 @@
   </div>
 </section>
 
+
 <footer>
   <span class="footer-id">BOYSWAG — LUKAS ASTRAL</span>
   <span class="footer-note">All rights reserved</span>
   <a href="https://linktr.ee/lukastrl" target="_blank" style="font-family: 'VT323', monospace; font-size: 0.75rem; letter-spacing: 0.2em; color: rgba(255,255,255,0.2); text-decoration: none; text-transform: uppercase; transition: color 0.2s; margin-top: 0; display:inline;" onmouseover="this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.color='rgba(255,255,255,0.2)'">GO TO LINKTR.EE ↗</a>
   <a href="cipher.html" style="font-family: 'VT323', monospace; font-size: 0.75rem; letter-spacing: 0.2em; color: rgba(255,255,255,0.15); text-decoration: none; text-transform: uppercase; transition: color 0.2s;" onmouseover="this.style.color='var(--hot-pink)'" onmouseout="this.style.color='rgba(255,255,255,0.15)'">⍟⍟⍟</a>
   <a href="deal.html" style="font-family: 'VT323', monospace; font-size: 0.75rem; letter-spacing: 0.2em; color: rgba(255,255,255,0.15); text-decoration: none; text-transform: uppercase; transition: color 0.2s;" onmouseover="this.style.color='var(--hot-pink)'" onmouseout="this.style.color='rgba(255,255,255,0.15)'">✦✦✦</a>
-  <span style="color: var(--hot-pink); font-size: 0.7rem; letter-spacing: 0.15em; width: 100%; margin-top: 0.5rem; line-height: 2.2; font-family: 'VT323', monospace;">⍧ 🜺 ⛧ ✶ ☿ ⛧  ✦ ✶ 🜳  🜺 ☊ ⍧  🜳 ☊  ✶̈ 🜺 ⛧ ⌬  ☿ ☊ ☩ ⛧ ⟁̈  ⟁  🜳 ☊  ✶ ☊ ✶̈  🜏 ✶ ☊ ⍧  ✦ ✶ 🜳  ⟁  🜺 ✦ ✠ ⛧  ✶ ☊ ✶̈ 🜺 ⟁ ✶ ☽  ✶̈ ☊  🜳 ☊  ⍧ ⟁ ✶̈ 🜺  ⟁ ✶̈ ·.  ✶̈ 🜺 ☊ 🜁 ⛧  ⍧ 🜺 ⟁ ☿ 🜺  ☤ ⍟ ⛧ ✦ 🜁 ⛧  ☩ ⛧ ·,  ⟁  🜏 ⛧ ⛧ ☤  ⟁ ✶  ☩ ⌬  🜺 ⛧ ✦ 🜳  ✦ ✶ 🜳  🜺 ☉ ☩  ✶̈ 🜺 ⛧ ☩ ;  ✦ ✶̈  ⍟ ⛧ ✦ 🜁 ✶̈  ☊ ✶̈ 🜺 ⛧ ✝ 🜁  🜺 ✦ ✠ ⛧  ✶̈ ☊ ⍟ 🜳  ☩ ⛧  ✶̈ 🜺 ✦ ✶̈  ⟁  🜳 ☊  🜁 ☊ ·.</span>
+  <span style="color: var(--hot-pink); font-size: 0.7rem; letter-spacing: 0.15em; width: 100%; margin-top: 0.5rem; line-height: 2.2; font-family: 'VT323', monospace;">⍧ 🜺 ⛧ ✶ ☿ ⛧  ✦ ✶ 🜳  🜺 ☊ ⍧  🜳 ☊  ✶̈ 🜺 ⛧ ⌬  ☿ ☊ ☩ ⛧ ⟁̈  ⟁  🜳 ☊  ✶ ☊ ✶̈  🜏 ✶ ☊ ⍧  ✦ ✶ 🜳  ⟁  🜺 ✦ ✠ ⛧  ✶ ☊ ✶̈ 🜺 ⟁ ✶ ☽  ✶̈ ☊  🜳 ☊  ⍧ ⟁ ✶̈ 🜺  ⟁ ✶̈ ·.  ✶̈ 🜺 ☊ 🜁 ⛧  ⍧ 🜺 ⟁ ☿ 🜺  ☤ ⍟ ⛧ ✦ 🜁 ⛧  ☩ ⛧ ·,  ⟁  🜏 ⛧ ⛧ ☤  ⟁ ✶  ☩ ⌬  🜺 ⛧ ✦ 🜳  ✦ ✶ 🜳  🜺 ☉ ☩  ✶̈ 🜺 ⛧ ☩ ;  ✦ ✶̈  ⍟ ⛧ ✦ 🜁 ✶̈  ☊ ✶̈ 🜺 ⛧ ⋊ 🜁  🜺 ✦ ✠ ⛧  ✶̈ ☊ ⍟ 🜳  ☩ ⛧  ✶̈ 🜺 ✦ ✶̈  ⟁  🜳 ☊  🜁 ☊ ·.</span>
 </footer>
 
 
+
+
+<!-- EMAIL POPUP -->
+<div id="email-popup">
+  <div class="email-popup-box">
+    <button class="email-popup-close" onclick="closeEmailPopup()">✕ CLOSE</button>
+    <div class="email-popup-eyebrow">▶ INCOMING TRANSMISSION</div>
+    <h2 class="email-popup-title">DID YOU WANNA GET DOWN?</h2>
+    <p class="email-popup-sub">
+      BE THE FIRST TO DROP WHEN BOYSWAG DROPS.<br>
+      No noise. Just signal.
+    </p>
+    <div id="email-form-wrap">
+      <form class="email-popup-form" onsubmit="submitEmail(event)">
+        <input class="email-popup-input" type="email" id="email-input" placeholder="YOUR EMAIL" required>
+        <button class="email-popup-btn" type="submit">✦ SUBSCRIBE</button>
+      </form>
+      <p class="email-popup-note">We won't spam you. Ever.</p>
+    </div>
+    <div id="email-success" class="email-success" style="display:none;">
+      <div class="email-success-title">TRANSMISSION RECEIVED.</div>
+      <div class="email-success-sub">We have what we need. Stay close.</div>
+    </div>
+    <p style="font-family:'VT323',monospace;font-size:0.8rem;letter-spacing:0.2em;color:rgba(255,255,255,0.25);text-transform:uppercase;text-align:center;margin-top:1.5rem;">
+      HAVE SOMETHING TO SAY? &nbsp;<a href="contact.html" style="color:rgba(255,150,180,0.7);text-decoration:none;transition:color 0.15s;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='rgba(255,150,180,0.7)'">CONTACT ↗</a>
+    </p>
+  </div>
+</div>
+
+
 <script>
-// BOOT FLASH — invert page white, then black, then settle
-(function(){
-  const body = document.body;
-  // frame 1: white — invert everything
-  body.style.filter = 'invert(1)';
-  body.style.background = '#ffffff';
+// EMAIL POPUP
+function closeEmailPopup() {
+  document.getElementById('email-popup').classList.remove('active');
+  sessionStorage.setItem('popup-dismissed', '1');
+}
+
+// show after 8 seconds if not dismissed
+if (!sessionStorage.getItem('popup-dismissed')) {
   setTimeout(() => {
-    // frame 2: black
-    body.style.filter = 'invert(1) brightness(0)';
-    setTimeout(() => {
-      // frame 3: settle
-      body.style.transition = 'filter 0.2s ease';
-      body.style.filter = 'none';
-      body.style.background = '';
-      setTimeout(() => { body.style.transition = ''; }, 250);
-    }, 400);
-  }, 700);
-})();
+    document.getElementById('email-popup').classList.add('active');
+  }, 39000);
+}
+
+// close on backdrop click
+document.getElementById('email-popup').addEventListener('click', function(e) {
+  if (e.target === this) closeEmailPopup();
+});
+
+async function submitEmail(e) {
+  e.preventDefault();
+  const email = document.getElementById('email-input').value;
+  const btn = e.target.querySelector('button');
+  btn.textContent = '▶ SUBMITTING...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('https://app.kit.com/forms/9233047/subscriptions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email_address: email })
+    });
+
+    if (res.ok || res.status === 200 || res.status === 201) {
+      document.getElementById('email-form-wrap').style.display = 'none';
+      document.getElementById('email-success').style.display = 'block';
+      setTimeout(closeEmailPopup, 3000);
+    } else {
+      btn.textContent = '✕ TRY AGAIN';
+      btn.disabled = false;
+    }
+  } catch(err) {
+    btn.textContent = '✕ TRY AGAIN';
+    btn.disabled = false;
+  }
+}
 </script>
 
 </body>
@@ -768,6 +997,133 @@ function loreTick() {
   });
 
   requestAnimationFrame(loreTick);
+
+// TRACKLIST HOVER GLITCH — tracks 2-6 only
+(function(){
+  const singles = ['UMM', 'MENTHOL'];
+  const flashColors = ['#FF2D78','#00CCFF','#FFE600','#00FF44','#CC00FF','#FF4400','#ffffff'];
+  const tracks = document.querySelectorAll('.glitch-track');
+
+  tracks.forEach((track) => {
+    const nameEl = track.querySelector('.track-name');
+    const single = singles[Math.floor(Math.random() * singles.length)];
+    let flickering = false;
+    let touchTimer = null;
+
+    function flick() {
+      if (!flickering) return;
+      nameEl.style.color = flashColors[Math.floor(Math.random() * flashColors.length)];
+      setTimeout(flick, 60 + Math.random() * 80);
+    }
+
+    function startFlicker() {
+      flickering = true;
+      nameEl.textContent = single;
+      flick();
+    }
+
+    function stopFlicker() {
+      flickering = false;
+      nameEl.textContent = '———';
+      nameEl.style.color = '';
+    }
+
+    // desktop — linger while hovered
+    track.addEventListener('mouseenter', startFlicker);
+    track.addEventListener('mouseleave', stopFlicker);
+
+    // mobile — show for 500ms then clear
+    track.addEventListener('touchstart', () => {
+      startFlicker();
+      clearTimeout(touchTimer);
+      touchTimer = setTimeout(stopFlicker, 500);
+    }, {passive:true});
+  });
+})();
+
+
+
+
+
+
+
+
+// TRACKLIST GLITCH — UMM and MENTHOL flicker between positions
+(function(){
+  const letters = ['B','O','Y','S','W','A','G'];
+  const singles = ['UMM', 'MENTHOL'];
+  const singleColors = ['#FF2D78', 'rgba(255,150,180,0.9)'];
+
+  // singles randomly appear and shift positions
+  let currentPositions = [-1, -1]; // where each single currently shows
+
+  function getRandomPositions() {
+    // pick 2 different random slots for the singles
+    const slots = new Set();
+    while (slots.size < 2) slots.add(Math.floor(Math.random() * 7));
+    return [...slots];
+  }
+
+  function clearSingles() {
+    for (let i = 0; i < 7; i++) {
+      const nameEl = document.getElementById('track-name-' + i);
+      const numEl = document.getElementById('track-num-' + i);
+      if (nameEl && nameEl.dataset.isSingle === 'true') {
+        nameEl.textContent = '———';
+        nameEl.style.color = '';
+        nameEl.dataset.isSingle = 'false';
+        numEl.textContent = letters[i] + ' — 0' + (i + 1);
+        numEl.style.color = '';
+      }
+    }
+  }
+
+  function placeSingles() {
+    clearSingles();
+    const positions = getRandomPositions();
+    currentPositions = positions;
+
+    singles.forEach((single, si) => {
+      const pos = positions[si];
+      const nameEl = document.getElementById('track-name-' + pos);
+      const numEl = document.getElementById('track-num-' + pos);
+      if (!nameEl) return;
+
+      // brief glitch flash before settling
+      nameEl.textContent = single;
+      nameEl.style.color = singleColors[si];
+      nameEl.dataset.isSingle = 'true';
+      numEl.style.color = singleColors[si];
+
+      // add SINGLE badge effect
+      const statusEl = nameEl.parentElement.querySelector('.track-status');
+      if (statusEl) {
+        statusEl.textContent = 'SINGLE';
+        statusEl.className = 'track-status status-single';
+      }
+    });
+  }
+
+  function glitchCycle() {
+    // flash briefly to show the singles are shifting
+    clearSingles();
+    setTimeout(() => {
+      placeSingles();
+      // schedule next glitch — random interval between 4-10 seconds
+      const next = 4000 + Math.random() * 6000;
+      setTimeout(glitchCycle, next);
+    }, 120 + Math.random() * 200);
+  }
+
+  // initial placement after short delay
+  setTimeout(() => {
+    placeSingles();
+    // start the glitch cycle
+    const first = 5000 + Math.random() * 5000;
+    setTimeout(glitchCycle, first);
+  }, 800);
+})();
+
 
 // BOYSWAG title flicker on scroll
 const heroTitle = document.getElementById('hero-title');
@@ -894,6 +1250,87 @@ epLink.addEventListener('mouseleave', () => { epLink.style.color = 'rgba(255,150
 }
 
 requestAnimationFrame(loreTick);
+
+
+
+
+
+// TRACKLIST GLITCH — UMM and MENTHOL flicker between positions
+(function(){
+  const letters = ['B','O','Y','S','W','A','G'];
+  const singles = ['UMM', 'MENTHOL'];
+  const singleColors = ['#FF2D78', 'rgba(255,150,180,0.9)'];
+
+  // singles randomly appear and shift positions
+  let currentPositions = [-1, -1]; // where each single currently shows
+
+  function getRandomPositions() {
+    // pick 2 different random slots for the singles
+    const slots = new Set();
+    while (slots.size < 2) slots.add(Math.floor(Math.random() * 7));
+    return [...slots];
+  }
+
+  function clearSingles() {
+    for (let i = 0; i < 7; i++) {
+      const nameEl = document.getElementById('track-name-' + i);
+      const numEl = document.getElementById('track-num-' + i);
+      if (nameEl && nameEl.dataset.isSingle === 'true') {
+        nameEl.textContent = '———';
+        nameEl.style.color = '';
+        nameEl.dataset.isSingle = 'false';
+        numEl.textContent = letters[i] + ' — 0' + (i + 1);
+        numEl.style.color = '';
+      }
+    }
+  }
+
+  function placeSingles() {
+    clearSingles();
+    const positions = getRandomPositions();
+    currentPositions = positions;
+
+    singles.forEach((single, si) => {
+      const pos = positions[si];
+      const nameEl = document.getElementById('track-name-' + pos);
+      const numEl = document.getElementById('track-num-' + pos);
+      if (!nameEl) return;
+
+      // brief glitch flash before settling
+      nameEl.textContent = single;
+      nameEl.style.color = singleColors[si];
+      nameEl.dataset.isSingle = 'true';
+      numEl.style.color = singleColors[si];
+
+      // add SINGLE badge effect
+      const statusEl = nameEl.parentElement.querySelector('.track-status');
+      if (statusEl) {
+        statusEl.textContent = 'SINGLE';
+        statusEl.className = 'track-status status-single';
+      }
+    });
+  }
+
+  function glitchCycle() {
+    // flash briefly to show the singles are shifting
+    clearSingles();
+    setTimeout(() => {
+      placeSingles();
+      // schedule next glitch — random interval between 4-10 seconds
+      const next = 4000 + Math.random() * 6000;
+      setTimeout(glitchCycle, next);
+    }, 120 + Math.random() * 200);
+  }
+
+  // initial placement after short delay
+  setTimeout(() => {
+    placeSingles();
+    // start the glitch cycle
+    const first = 5000 + Math.random() * 5000;
+    setTimeout(glitchCycle, first);
+  }, 800);
+})();
+
 
 // BOYSWAG title flicker on scroll
 const heroTitle = document.getElementById('hero-title');
