@@ -257,7 +257,8 @@
   </p>
 
   <div class="email-address">
-    ✉ &nbsp;<a href="/cdn-cgi/l/email-protection#ba8dcfd1dbc9cec8d6faddd7dbd3d694d9d5d7"><span class="__cf_email__" data-cfemail="1e294b555f4d4a4c525e59535f5752305d5153">[email&#160;protected]</span></a>
+    ✉ &nbsp;<span id="biz-email" style="cursor:pointer;color:rgba(255,150,180,0.9);" onclick="copyEmail()" title="Click to copy">7UKASTRL @ GMAIL.COM</span>
+    <span id="copy-confirm" style="font-size:0.7rem;color:rgba(255,45,120,0.6);margin-left:0.5rem;opacity:0;transition:opacity 0.3s;">COPIED</span>
   </div>
 
   <hr class="divider">
@@ -274,7 +275,7 @@
       <textarea class="form-textarea" id="message" placeholder="SAY IT. (THANKS.)" required></textarea>
 
       <button class="form-btn" type="submit">✦ SEND TRANSMISSION</button>
-      <p class="form-note">This sends directly to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6750120c061413150b27000a060e0b4904080a">[email&#160;protected]</a></p>
+      <p class="form-note">Tap SEND to open your mail app with this pre-filled —<br>or copy the address above and write directly.</p>
     </form>
   </div>
 
@@ -284,7 +285,7 @@
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 function sendContact(e) {
   e.preventDefault();
   const email = document.getElementById('from-email').value;
