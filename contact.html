@@ -245,52 +245,57 @@
 
 <nav>
   <a href="index.html" class="nav-logo">LUKAS ASTRAL</a>
-  <a href="index.html" class="back-link">← Back</a>
+  <a href="index.html" class="back-link">&larr; Back</a>
 </nav>
 
 <div class="wrap">
-  <div class="eyebrow">▶ TRANSMISSION</div>
+  <div class="eyebrow">&#9654; TRANSMISSION</div>
   <h1 class="page-title">Have something<br>to say?</h1>
   <p class="page-sub">
-    For business inquiries, collabs, or anything else —<br>
-    reach out directly or use the form below.
+    For business inquiries, collabs, or anything else &mdash;<br>
+    reach out directly.
   </p>
 
   <div class="email-address">
-    ✉ &nbsp;<span id="biz-email" style="cursor:pointer;color:rgba(255,150,180,0.9);" onclick="copyEmail()" title="Click to copy">7UKASTRL @ GMAIL.COM</span>
+    &#9993; &nbsp;
+    <span id="biz-email" style="cursor:pointer;color:rgba(255,150,180,0.9);" onclick="copyEmail()" title="Tap to copy">
+      7UKASTRL @ GMAIL.COM
+    </span>
+    <span style="font-size:0.7rem;color:rgba(255,255,255,0.2);margin-left:0.5rem;">(NO SPACES &mdash; TAP TO COPY)</span>
     <span id="copy-confirm" style="font-size:0.7rem;color:rgba(255,45,120,0.6);margin-left:0.5rem;opacity:0;transition:opacity 0.3s;">COPIED</span>
-  </div>
-
-  <hr class="divider">
-
-  <div id="contact-form-wrap">
-    <form onsubmit="sendContact(event)">
-      <label class="form-label">▶ Your email</label>
-      <input class="form-input" type="email" id="from-email" placeholder="YOUR EMAIL" required>
-
-      <label class="form-label">▶ Subject</label>
-      <input class="form-input" type="text" id="subject" placeholder="WHAT'S THIS ABOUT?" required>
-
-      <label class="form-label">▶ Message</label>
-      <textarea class="form-textarea" id="message" placeholder="SAY IT. (THANKS.)" required></textarea>
-
-      <button class="form-btn" type="submit">✦ SEND TRANSMISSION</button>
-      <p class="form-note">Tap SEND to open your mail app with this pre-filled —<br>or copy the address above and write directly.</p>
-    </form>
-  </div>
-
-  <div class="success-msg" id="contact-success">
-    <h3>TRANSMISSION SENT.</h3>
-    <p>We'll be in touch.</p>
   </div>
 </div>
 
 <script>
-function sendContact(e) {
-  e.preventDefault();
-  const email = document.getElementById('from-email').value;
-  const subject = document.getElementById('subject').value;
-  const message = document.getElementById('message').value;
+function copyEmail() {
+  var addr = '7ukastrl@gmail.com';
+  var el = document.getElementById('copy-confirm');
 
-  // Open mailto with prefilled fields
-  const m
+  // try modern clipboard first
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(addr).then(function() {
+      el.style.opacity = '1';
+      setTimeout(function() { el.style.opacity = '0'; }, 2000);
+    });
+    return;
+  }
+
+  // fallback — create temp textarea
+  var ta = document.createElement('textarea');
+  ta.value = addr;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try {
+    document.execCommand('copy');
+    el.style.opacity = '1';
+    setTimeout(function() { el.style.opacity = '0'; }, 2000);
+  } catch(e) {}
+  document.body.removeChild(ta);
+}
+</script>
+
+</body>
+</html>
