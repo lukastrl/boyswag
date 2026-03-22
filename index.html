@@ -816,10 +816,11 @@
       No noise. Just signal.
     </p>
     <div id="email-form-wrap">
-      <form class="email-popup-form" onsubmit="submitEmail(event)">
-        <input class="email-popup-input" type="email" id="email-input" placeholder="YOUR EMAIL" required>
+      <form class="email-popup-form" action="https://app.kit.com/forms/9233047/subscriptions" method="post" target="kit-iframe" onsubmit="handleKitSubmit(this)">
+        <input class="email-popup-input" type="email" name="email_address" id="email-input" placeholder="YOUR EMAIL" required>
         <button class="email-popup-btn" type="submit">✦ SUBSCRIBE</button>
       </form>
+      <iframe name="kit-iframe" style="display:none;"></iframe>
       <p class="email-popup-note">We won't spam you. Ever.</p>
     </div>
     <div id="email-success" class="email-success" style="display:none;">
@@ -852,32 +853,16 @@ document.getElementById('email-popup').addEventListener('click', function(e) {
   if (e.target === this) closeEmailPopup();
 });
 
-async function submitEmail(e) {
-  e.preventDefault();
-  const email = document.getElementById('email-input').value;
-  const btn = e.target.querySelector('button');
+function handleKitSubmit(form) {
+  const btn = form.querySelector('button');
   btn.textContent = '▶ SUBMITTING...';
   btn.disabled = true;
-
-  try {
-    const res = await fetch('https://app.kit.com/forms/9233047/subscriptions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email_address: email })
-    });
-
-    if (res.ok || res.status === 200 || res.status === 201) {
-      document.getElementById('email-form-wrap').style.display = 'none';
-      document.getElementById('email-success').style.display = 'block';
-      setTimeout(closeEmailPopup, 3000);
-    } else {
-      btn.textContent = '✕ TRY AGAIN';
-      btn.disabled = false;
-    }
-  } catch(err) {
-    btn.textContent = '✕ TRY AGAIN';
-    btn.disabled = false;
-  }
+  // give the iframe POST a moment then show success
+  setTimeout(function() {
+    document.getElementById('email-form-wrap').style.display = 'none';
+    document.getElementById('email-success').style.display = 'block';
+    setTimeout(closeEmailPopup, 3000);
+  }, 1200);
 }
 </script>
 
