@@ -825,6 +825,8 @@
     <div id="email-success" class="email-success" style="display:none;">
       <div class="email-success-title">TRANSMISSION RECEIVED.</div>
       <div class="email-success-sub">We have what we need. Stay close.</div>
+      <div style="font-family:'VT323',monospace;font-size:0.85rem;letter-spacing:0.2em;color:rgba(255,255,255,0.7);text-transform:uppercase;margin-top:1.2rem;line-height:2;">CHECK YOUR EMAIL TO CONFIRM YOUR SUBSCRIPTION NOW.</div>
+      <div id="spam-notice" style="font-family:'VT323',monospace;font-size:0.85rem;letter-spacing:0.2em;text-transform:uppercase;margin-top:0.3rem;">CAN'T FIND IT? CHECK YOUR SPAM FOLDER.</div>
     </div>
     <p style="font-family:'VT323',monospace;font-size:0.8rem;letter-spacing:0.2em;color:rgba(255,255,255,0.25);text-transform:uppercase;text-align:center;margin-top:1.5rem;">
       HAVE SOMETHING TO SAY? &nbsp;<a href="contact.html" style="color:rgba(255,150,180,0.7);text-decoration:none;transition:color 0.15s;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='rgba(255,150,180,0.7)'">CONTACT ↗</a>
@@ -863,6 +865,21 @@ function submitToKit(e) {
   });
 }
 
+
+// SPAM NOTICE GLOW
+(function(){
+  var el = document.getElementById('spam-notice');
+  if (!el) return;
+  var colors = ['#FF2D78','#00CCFF','#FFE600','#00FF44','#CC00FF','#FF4400','#ffffff','#FF2D78'];
+  function flick() {
+    var c = colors[Math.floor(Math.random() * colors.length)];
+    el.style.color = c;
+    el.style.textShadow = '0 0 8px ' + c + ', 0 0 20px ' + c;
+    setTimeout(flick, 80 + Math.random() * 120);
+  }
+  flick();
+})();
+
 // EMAIL POPUP
 function closeEmailPopup() {
   document.getElementById('email-popup').classList.remove('active');
@@ -881,6 +898,24 @@ document.getElementById('email-popup').addEventListener('click', function(e) {
   if (e.target === this) closeEmailPopup();
 });
 
+
+
+// SPAM NOTICE GLOW
+(function(){
+  var colors = ['#FF2D78','#00CCFF','#FFE600','#00FF44','#CC00FF','#FF4400','#ffffff','#FF2D78'];
+  function flickSpam() {
+    var el = document.getElementById('spam-notice');
+    if (!el) { setTimeout(flickSpam, 200); return; }
+    function flick() {
+      var c = colors[Math.floor(Math.random() * colors.length)];
+      el.style.color = c;
+      el.style.textShadow = '0 0 8px ' + c + ', 0 0 20px ' + c;
+      setTimeout(flick, 80 + Math.random() * 120);
+    }
+    flick();
+  }
+  flickSpam();
+})();
 
 </script>
 
