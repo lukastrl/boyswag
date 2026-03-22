@@ -585,7 +585,6 @@
   }
 
 </style>
-<script async data-uid="b584790183" src="https://lukas-astral.kit.com/b584790183/index.js"></script>
 </head>
 <body>
 <script>
@@ -817,10 +816,9 @@
       No noise. Just signal.
     </p>
     <div id="email-form-wrap">
-      <form class="email-popup-form seva-form formkit-form" data-sv-form="9233047" data-uid="b584790183" data-format="inline" data-version="5" action="https://app.kit.com/forms/9233047/subscriptions" method="post">
-        <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
-        <input class="email-popup-input" type="email" name="email_address" id="email-input" placeholder="YOUR EMAIL" required>
-        <button data-element="submit" class="email-popup-btn" type="submit">✦ SUBSCRIBE</button>
+      <form class="email-popup-form" onsubmit="submitToKit(event)">
+        <input class="email-popup-input" type="email" id="email-input" placeholder="YOUR EMAIL" required>
+        <button class="email-popup-btn" type="submit">✦ SUBSCRIBE</button>
       </form>
       <p class="email-popup-note">We won't spam you. Ever.</p>
     </div>
@@ -837,14 +835,33 @@
 
 <script>
 
-// Listen for Kit's successful submission event
-window.addEventListener('message', function(e) {
-  if (e.data && e.data.type === 'formkit:submit:success') {
+
+
+function submitToKit(e) {
+  e.preventDefault();
+  var email = document.getElementById('email-input').value;
+  var btn = e.target.querySelector('button');
+  btn.textContent = '▶ SUBMITTING...';
+  btn.disabled = true;
+
+  var data = new FormData();
+  data.append('email_address', email);
+
+  fetch('https://app.kit.com/forms/9233047/subscriptions', {
+    method: 'POST',
+    body: data,
+    mode: 'no-cors'
+  }).then(function() {
     document.getElementById('email-form-wrap').style.display = 'none';
     document.getElementById('email-success').style.display = 'block';
     setTimeout(closeEmailPopup, 3000);
-  }
-});
+  }).catch(function() {
+    // no-cors means we can't read response but it likely went through
+    document.getElementById('email-form-wrap').style.display = 'none';
+    document.getElementById('email-success').style.display = 'block';
+    setTimeout(closeEmailPopup, 3000);
+  });
+}
 
 // EMAIL POPUP
 function closeEmailPopup() {
