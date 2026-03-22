@@ -585,6 +585,7 @@
   }
 
 </style>
+<script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
 </head>
 <body>
 <script>
@@ -816,11 +817,11 @@
       No noise. Just signal.
     </p>
     <div id="email-form-wrap">
-      <form class="email-popup-form" action="https://app.kit.com/forms/9233047/subscriptions" method="post" target="kit-iframe" onsubmit="handleKitSubmit(this)">
+      <form class="email-popup-form seva-form formkit-form" action="https://app.kit.com/forms/9233047/subscriptions" method="post" data-sv-form="9233047" data-uid="b584790183" data-format="inline" data-version="5">
+        <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
         <input class="email-popup-input" type="email" name="email_address" id="email-input" placeholder="YOUR EMAIL" required>
-        <button class="email-popup-btn" type="submit">✦ SUBSCRIBE</button>
+        <button data-element="submit" class="email-popup-btn" type="submit">✦ SUBSCRIBE</button>
       </form>
-      <iframe name="kit-iframe" style="display:none;"></iframe>
       <p class="email-popup-note">We won't spam you. Ever.</p>
     </div>
     <div id="email-success" class="email-success" style="display:none;">
@@ -835,6 +836,16 @@
 
 
 <script>
+
+// Listen for Kit's successful submission event
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'formkit:submit:success') {
+    document.getElementById('email-form-wrap').style.display = 'none';
+    document.getElementById('email-success').style.display = 'block';
+    setTimeout(closeEmailPopup, 3000);
+  }
+});
+
 // EMAIL POPUP
 function closeEmailPopup() {
   document.getElementById('email-popup').classList.remove('active');
@@ -853,17 +864,7 @@ document.getElementById('email-popup').addEventListener('click', function(e) {
   if (e.target === this) closeEmailPopup();
 });
 
-function handleKitSubmit(form) {
-  const btn = form.querySelector('button');
-  btn.textContent = '▶ SUBMITTING...';
-  btn.disabled = true;
-  // give the iframe POST a moment then show success
-  setTimeout(function() {
-    document.getElementById('email-form-wrap').style.display = 'none';
-    document.getElementById('email-success').style.display = 'block';
-    setTimeout(closeEmailPopup, 3000);
-  }, 1200);
-}
+
 </script>
 
 </body>
