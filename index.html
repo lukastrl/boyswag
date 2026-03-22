@@ -856,12 +856,10 @@ function submitToKit(e) {
   }).then(function() {
     document.getElementById('email-form-wrap').style.display = 'none';
     document.getElementById('email-success').style.display = 'block';
-    setTimeout(closeEmailPopup, 3000);
   }).catch(function() {
     // no-cors means we can't read response but it likely went through
     document.getElementById('email-form-wrap').style.display = 'none';
     document.getElementById('email-success').style.display = 'block';
-    setTimeout(closeEmailPopup, 3000);
   });
 }
 
